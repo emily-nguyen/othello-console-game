@@ -55,6 +55,30 @@ class OthelloGame(self):
         if type(n) != int or not (_is_valid_number(n) and _is_even_number(n)):
             raise InvalidOthelloMoveError()
 
+    def _new_board(self, row:int, col:int, top_left:str)->[[str]]:
+        '''Creates initial game board with four tiles in center, starting with top left player as indicated'''
+        self._require_valid_number(row)
+        self._require_valid_number(col)
+
+        board = []
+
+        for r in range(row):
+            board.append([])
+            for c in range(col):
+                board[-1].append('')
+
+        if top_left == 'W':
+            top_right = 'B'
+        else:
+            top_right = 'W'
+
+        board[row//2][col//2] = top_left
+        board[row//2][col//2+1] = top_right
+        board[row//2+1][col//2] = top_right
+        board[row//2+1][col//2+1] == top_left
+            
+        return board
+
     def _opposite_turn(self)->str:
         '''Returns the opposite player'''
         if self._turn == 'B':

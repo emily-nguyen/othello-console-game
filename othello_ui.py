@@ -54,5 +54,21 @@ def get_most(s:str)->bool:
             print('Invalid {}. Please try again.'.format(s))
             print()
 
+'''
+def print_board(game_state:ConnectFourGameState)->None:
+    // Prints the game board
+    for number in range(BOARD_COLUMNS):
+        print(number+1, sep='', end=' ')
+    print()
+    for row in range(BOARD_ROWS):
+        for col in range(BOARD_COLUMNS):
+            if game_state.board[col][row] == '': 
+                print('.', sep='', end = ' ')
+            else: 
+                print(game_state.board[col][row], sep='', end=' ')
+        print()
+    print()
+'''
+
 if __name__ == '__main__':
     main()
