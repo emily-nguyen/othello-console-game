@@ -9,7 +9,7 @@ class OthelloGameOverError(Exception):
     already over'''
     pass 
 
-class OthelloGame(self):
+class OthelloGame:
     def __init__(self, row:int, col:int, top_left:str, turn:str, most:bool):
         '''Initializes the OthelloGame class object'''
         self._row = row
@@ -42,21 +42,22 @@ class OthelloGame(self):
                     result += 1
         return result
 
-    def _is_valid_number(n:int)->bool:
+    def _is_valid_number(self, n:int)->bool:
         '''Returns True if the given number is valid, returns False otherwise'''
         return 4 <= n <= 16
 
-    def _is_even_number(n:int)->bool:
+    def _is_even_number(self, n:int)->bool:
         '''Returns True if the given number is even, returns False otherwise'''
         return n%2 == 0
 
-    def _require_valid_number(n:int)->None:
+    def _require_valid_number(self, n:int)->None:
         '''Raises an InvalidOthelloMoveError is its parameter isn't a valid number'''
-        if type(n) != int or not (_is_valid_number(n) and _is_even_number(n)):
+        if type(n) != int or not (self._is_valid_number(n) and self._is_even_number(n)):
             raise InvalidOthelloMoveError()
 
     def _new_board(self, row:int, col:int, top_left:str)->[[str]]:
-        '''Creates initial game board with four tiles in center, starting with top left player as indicated'''
+        '''Creates initial game board with four tiles in center, starting with top left player
+        as indicated'''
         self._require_valid_number(row)
         self._require_valid_number(col)
 
@@ -72,10 +73,10 @@ class OthelloGame(self):
         else:
             top_right = 'W'
 
+        board[row//2-1][col//2-1] = top_left
+        board[row//2-1][col//2] = top_right
+        board[row//2][col//2-1] = top_right
         board[row//2][col//2] = top_left
-        board[row//2][col//2+1] = top_right
-        board[row//2+1][col//2] = top_right
-        board[row//2+1][col//2+1] == top_left
             
         return board
 

@@ -1,5 +1,7 @@
 # Project 4: Othello Console User Interface
 
+import othello_game_logic
+
 def main():
     print('Enter an even integer b/t 4 and 16 inclusive')
     row = get_int('ROW')
@@ -9,6 +11,11 @@ def main():
     turn = get_letter('STARTING PLAYER')
     print('Enter [Y]es or [N]o')
     most = get_most('MOST TILES')
+
+    game_state = othello_game_logic.OthelloGame(row, col, top_left, turn, most)
+    board = game_state.get_board()
+    print_board(row, col, board)
+
 
 def is_color(c:str)->bool:
     '''Returns true if c is W or B, false otherwise'''
@@ -23,7 +30,7 @@ def get_int(s:str)->int:
     while True:
         try:
             value = int(input('{}: '.format(s)))
-            break
+            return value
         except:
             print('Invalid {}. Please try again.'.format(s))
             print()
@@ -34,7 +41,7 @@ def get_letter(s:str)->str:
         try:
             letter = input('{}: '.format(s)).strip().upper()
             if is_color(letter):
-                break
+                return letter
             raise Exception
         except:
             print('Invalid {}. Please try again.'.format(s))
@@ -54,21 +61,37 @@ def get_most(s:str)->bool:
             print('Invalid {}. Please try again.'.format(s))
             print()
 
-'''
-def print_board(game_state:ConnectFourGameState)->None:
-    // Prints the game board
-    for number in range(BOARD_COLUMNS):
-        print(number+1, sep='', end=' ')
+def print_board(row:int, col:int, board:[[str]])->None:
+    '''Prints the othello game board'''
+    print('  ', end='')
+    for n in range(col):
+        if n < 9:
+            print(' ', end='')
+            print(n+1, end='  ')
+        else:
+            print('', end=' ')
+            print(n+1, end=' ')
     print()
-    for row in range(BOARD_ROWS):
-        for col in range(BOARD_COLUMNS):
-            if game_state.board[col][row] == '': 
-                print('.', sep='', end = ' ')
-            else: 
-                print(game_state.board[col][row], sep='', end=' ')
+
+    if row > col:
+        larger = row
+        smaller = col
+    else:
+        larger = col
+        smaller = row
+
+    for i in range(larger):
+        if i < 9:
+            print(i+1, end='  ')
+        else:
+            print(i+1, end=' ')
+        for j in range(smaller):
+            if board[j][i] == '':
+                print('.', end='   ')
+            else:
+                print(board[j][i], end='   ')
         print()
     print()
-'''
 
 if __name__ == '__main__':
     main()
