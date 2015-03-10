@@ -5,31 +5,25 @@ def main():
     row = get_int('ROW')
     col = get_int('COL')
     print('Enter [W]hite or [B]lack')
-    start = get_letter('STARTING PLAYER')
     top_left = get_letter('TOP LEFT CORNER')
+    turn = get_letter('STARTING PLAYER')
+    print('Enter [Y]es or [N]o')
+    most = get_most('MOST TILES')
 
-def is_even(n:int)->bool:
-    '''Returns true if n is even, false otherwise'''
-    return (n%2 == 0)
-
-def is_range(n:int)->bool:
-    '''Returns true if n is in range 4 <= n <= 16, false otherwise'''
-    return (4 <= n <= 16)
-
-def is_letter(c:str)->bool:
+def is_color(c:str)->bool:
     '''Returns true if c is W or B, false otherwise'''
     return (c == 'W' or c == 'B')
+
+def is_letter(c:str)->bool:
+    '''Returns true if c is Y or N, false otherwise'''
+    return (c == 'Y' or c == 'N')
 
 def get_int(s:str)->int:
     '''Gets the number of rows or columns from the user b/t 4 and 16 inclusive'''
     while True:
         try:
             value = int(input('{}: '.format(s)))
-            if is_range(value) and is_even(value):
-                break
-            raise Exception
-        except ValueError:
-            print('ValueError: Enter an integer')
+            break
         except:
             print('Invalid {}. Please try again.'.format(s))
             print()
@@ -39,9 +33,23 @@ def get_letter(s:str)->str:
     while True:
         try:
             letter = input('{}: '.format(s)).strip().upper()
-            if is_letter(letter):
+            if is_color(letter):
                 break
-            raise exception
+            raise Exception
+        except:
+            print('Invalid {}. Please try again.'.format(s))
+            print()
+
+def get_most(s:str)->bool:
+    '''Gets the win type of the game: most tiles or less tiles wins'''
+    while True:
+        try:
+            most = input('{}: '.format(s)).strip().upper()
+            if is_letter(most):
+                if most == 'Y':
+                    return True
+                return False
+            raise Exception
         except:
             print('Invalid {}. Please try again.'.format(s))
             print()
