@@ -26,6 +26,7 @@ def main():
         print('Enter an even integer b/t 4 and 16 inclusive')
         move_row = get_int('ROW')
         move_col = get_int('COL')
+        result = game_state.make_move(move_row, move_col)
         break
 
 def is_color(c:str)->bool:
@@ -80,6 +81,7 @@ def print_score(game_state:othello_game_logic.OthelloGame)->None:
 
 def print_board(row:int, col:int, board:[[str]])->None:
     '''Prints the othello game board'''
+    print(board)
     print('  ', end='')
     
     for n in range(col):

@@ -39,7 +39,13 @@ class OthelloGame:
 
     def make_move(self, row:int, col:int)->None:
         '''If move is valid, execute move and update winning state, otherwise raise invalid move exception'''
-        pass
+        if not self._is_valid_move(row, col) or self._winner != None:
+            raise InvalidOthelloMoveError()
+        self._board[row-1][col-1] = self._turn
+        flip_list = self._flip_list(row, col)
+        for x,y in flip_list:
+            self._board[x][y] = self._turn
+        self._update_winning_state()
 
     def _is_valid_number(self, n:int)->bool:
         '''Returns True if the given number is valid, returns False otherwise'''
@@ -89,10 +95,63 @@ class OthelloGame:
         '''Returns True if move is within boundaries of row / col and it's a possible move'''
         if row < 0 or col < 0 or row > self._row or col > self._col or self._board[row-1][col-1] != '':
             return False
+        if self._flip_list(row, col):
+            return True
+        return False
 
+    def _flip_list(self, row:int, col:int)->list:
+        '''Returns a list of the opposite pieces that will be flipped'''
+        opposite = []
         for x,y in self._directions:
-            if row-1+x < self._row and col-1+y < self._col:
-                if self._board[row-1+x][col-1+y] == self._opposite_turn():
+            print('XY', x, y)
+            r = row-1+x
+            c = col-1+y
+            print('RC', r, c)
+            while True:
+                try:
+                    if self._board[r][c] == self._opposite_turn():
+                        opposite.append((r,c))
+                        r += x
+                        c += y
+                    else:
+                        break
+                except:
+                    break
+        return opposite
+
+    def _check_valid_moves()->bool:
+        '''Returns True if the opposite player still has valid moves, returns False otherwise'''
+        self._turn = self._opposite_turn()
+        for row in range(self._row):
+            for col in range(self._col):
+                if self._is_valid_move(row, col):
                     return True
         return False
+
+    def _update_winning_state(self)->None:
+        '''Checks if there are still valid moves, else determine if there's a winnner'''
+        # Check if opposite player has valid moves left
+        if self._check_valid_moves():
+            return None
+        # Check if current player has valid moves left
+        if self._check_valid_moves():
+            return None
+
+        black = self.disc_count('B')
+        white = self.disc_count('W')
+        if black == white:
+            self._winner = 'Tie'
+            return None
+        elif self._most:
+            if black > white:
+                self._winner = 'Black'
+            else:
+                self._winner = 'White'
+        else:
+            if black < white:
+                self._winner = 'Black'
+            else:
+                self._winner = 'White'
+
+
 
