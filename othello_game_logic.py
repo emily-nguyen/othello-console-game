@@ -152,5 +152,3 @@ class OthelloGame:
                 else:
                     break
         return result
-
-

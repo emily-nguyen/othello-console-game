@@ -32,6 +32,7 @@ def main():
                 break
             except:
                 print('InvalidOthelloMoveError: Please try again')
+
     board = game_state.get_board()
     print_board(row, col, board)
     print('Game Over')
@@ -90,7 +91,6 @@ def print_score(game_state:othello_game_logic.OthelloGame)->None:
 
 def print_board(row:int, col:int, board:[[str]])->None:
     '''Prints the othello game board'''
-    # print(board)
     print('  ', end='')
     
     for n in range(col):
