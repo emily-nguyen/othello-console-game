@@ -6,16 +6,27 @@ def main():
     print('Enter an even integer b/t 4 and 16 inclusive')
     row = get_int('ROW')
     col = get_int('COL')
-    print('Enter [W]hite or [B]lack')
     top_left = get_letter('TOP LEFT CORNER')
     turn = get_letter('STARTING PLAYER')
+    print('Enter [W]hite or [B]lack')
     print('Enter [Y]es or [N]o')
     most = get_most('MOST TILES')
 
-    game_state = othello_game_logic.OthelloGame(row, col, top_left, turn, most)
-    board = game_state.get_board()
-    print_board(row, col, board)
-
+    game_state = othello_game_logic.OthelloGame(row, col, turn, top_left, most)
+    
+    while True:
+        print()
+        print_score(game_state)
+        print()
+        board = game_state.get_board()
+        print_board(row, col, board)
+        print_turn(game_state)
+        print()
+        print('Make a move')
+        print('Enter an even integer b/t 4 and 16 inclusive')
+        move_row = get_int('ROW')
+        move_col = get_int('COL')
+        break
 
 def is_color(c:str)->bool:
     '''Returns true if c is W or B, false otherwise'''
@@ -61,6 +72,12 @@ def get_most(s:str)->bool:
             print('Invalid {}. Please try again.'.format(s))
             print()
 
+def print_score(game_state:othello_game_logic.OthelloGame)->None:
+    '''Prints the current score (count) of black and white discs'''
+    black = game_state.disc_count('B')
+    white = game_state.disc_count('W')
+    print('SCORE:\nBlack: {}\tWhite: {}'.format(black, white))
+
 def print_board(row:int, col:int, board:[[str]])->None:
     '''Prints the othello game board'''
     print('  ', end='')
@@ -86,6 +103,11 @@ def print_board(row:int, col:int, board:[[str]])->None:
                 print(board[r][c], end='   ')
         print()
     print()
+
+def print_turn(game_state:othello_game_logic.OthelloGame)->None:
+    '''Prints the current player's turn'''
+    turn = game_state.get_turn()
+    print("Player {}'s turn".format(turn))
 
 if __name__ == '__main__':
     main()

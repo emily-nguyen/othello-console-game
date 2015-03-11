@@ -4,18 +4,13 @@ class InvalidOthelloMoveError(Exception):
     '''Raised whenever an invalid move is made'''
     pass
 
-class OthelloGameOverError(Exception):
-    '''Raised whenever an attempt is made to make a move after the game is
-    already over'''
-    pass 
-
 class OthelloGame:
-    def __init__(self, row:int, col:int, top_left:str, turn:str, most:bool):
+    def __init__(self, row:int, col:int, turn:str, top_left:str, most:bool):
         '''Initializes the OthelloGame class object'''
         self._row = row
         self._col = col
-        self._top_left = top_left
         self._turn = turn
+        self._top_left = top_left
         self._most = most
         self._board = self._new_board(row, col, top_left)
         self._winner = None
@@ -33,14 +28,18 @@ class OthelloGame:
         '''Returns the winning player'''
         return self._winner
 
-    def tile_count(self, s:str)->int:
-        '''Returns the number of tiles of indicated player'''
+    def disc_count(self, s:str)->int:
+        '''Returns the number of discs of indicated player'''
         result = 0
         for row in self._board:
             for col in row:
                 if col == s:
                     result += 1
         return result
+
+    def make_move(self, row:int, col:int)->None:
+        '''If move is valid, execute move and update winning state, otherwise raise invalid move exception'''
+        pass
 
     def _is_valid_number(self, n:int)->bool:
         '''Returns True if the given number is valid, returns False otherwise'''
@@ -56,13 +55,12 @@ class OthelloGame:
             raise InvalidOthelloMoveError()
 
     def _new_board(self, row:int, col:int, top_left:str)->[[str]]:
-        '''Creates initial game board with four tiles in center, starting with top left player
+        '''Creates initial game board with four discs in center, starting with top left player
         as indicated'''
         self._require_valid_number(row)
         self._require_valid_number(col)
 
         board = []
-
         for r in range(row):
             board.append([])
             for c in range(col):
@@ -86,3 +84,15 @@ class OthelloGame:
             return 'W'
         elif self._turn == 'W':
             return 'B'
+
+    def _is_valid_move(self, row:int, col:int)->bool:
+        '''Returns True if move is within boundaries of row / col and it's a possible move'''
+        if row < 0 or col < 0 or row > self._row or col > self._col or self._board[row-1][col-1] != '':
+            return False
+
+        for x,y in self._directions:
+            if row-1+x < self._row and col-1+y < self._col:
+                if self._board[row-1+x][col-1+y] == self._opposite_turn():
+                    return True
+        return False
+
