@@ -32,7 +32,11 @@ def main():
                 break
             except:
                 print('InvalidOthelloMoveError: Please try again')
-    print('Game Over')        
+    board = game_state.get_board()
+    print_board(row, col, board)
+    print('Game Over')
+    print_score(game_state)
+    print_winner(game_state)
     
 def is_color(c:str)->bool:
     '''Returns true if c is W or B, false otherwise'''
@@ -115,6 +119,11 @@ def print_turn(game_state:othello_game_logic.OthelloGame)->None:
     '''Prints the current player's turn'''
     turn = game_state.get_turn()
     print("Player {}'s turn".format(turn))
+
+def print_winner(game_state:othello_game_logic.OthelloGame)->None:
+    '''Prints the winner based on most or less discs as indicated at start of game'''
+    winner = game_state.get_winner()
+    print('{} is the winner!'.format(winner))
 
 if __name__ == '__main__':
     main()
