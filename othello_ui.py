@@ -14,7 +14,7 @@ def main():
 
     game_state = othello_game_logic.OthelloGame(row, col, turn, top_left, most)
     
-    while True:
+    while game_state.get_winner() == None:
         print()
         print_score(game_state)
         print()
@@ -24,11 +24,16 @@ def main():
         print()
         print('Make a move')
         print('Enter an even integer b/t 4 and 16 inclusive')
-        move_row = get_int('ROW')
-        move_col = get_int('COL')
-        result = game_state.make_move(move_row, move_col)
-        break
-
+        while True:
+            try:
+                move_row = get_int('ROW')
+                move_col = get_int('COL')
+                game_state.make_move(move_row, move_col)
+                break
+            except:
+                print('InvalidOthelloMoveError: Please try again')
+    print('Game Over')        
+    
 def is_color(c:str)->bool:
     '''Returns true if c is W or B, false otherwise'''
     return (c == 'W' or c == 'B')
@@ -81,7 +86,7 @@ def print_score(game_state:othello_game_logic.OthelloGame)->None:
 
 def print_board(row:int, col:int, board:[[str]])->None:
     '''Prints the othello game board'''
-    print(board)
+    # print(board)
     print('  ', end='')
     
     for n in range(col):

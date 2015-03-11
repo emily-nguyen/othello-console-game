@@ -99,27 +99,10 @@ class OthelloGame:
             return True
         return False
 
-    def _flip_list(self, row:int, col:int)->list:
-        '''Returns a list of the opposite pieces that will be flipped'''
-        opposite = []
-        for x,y in self._directions:
-            print('XY', x, y)
-            r = row-1+x
-            c = col-1+y
-            print('RC', r, c)
-            while True:
-                try:
-                    if self._board[r][c] == self._opposite_turn():
-                        opposite.append((r,c))
-                        r += x
-                        c += y
-                    else:
-                        break
-                except:
-                    break
-        return opposite
-
-    def _check_valid_moves()->bool:
+    def _is_in_board(self, row:int, col:int)->bool:
+        return row < 0 or col < 0 or row > self._row or col > self._col
+    
+    def _check_valid_moves(self)->bool:
         '''Returns True if the opposite player still has valid moves, returns False otherwise'''
         self._turn = self._opposite_turn()
         for row in range(self._row):
