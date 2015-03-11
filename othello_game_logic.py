@@ -41,25 +41,10 @@ class OthelloGame:
         '''If move is valid, execute move and update winning state, otherwise raise invalid move exception'''
         if not (self._is_valid_move(row, col)) or self._winner != None:
             raise InvalidOthelloMoveError()
-#flip_list = self._flip_list(row, col)
-#for x,y in flip_list:
-#self._board[x][y] = self._turn
-        for x,y in self._directions:
-            count = 1
-            r = row-1+x*count
-            c = col-1+y*count
-            while self._is_in_board(r, c) and (self._board[r][c] != '' and self._board[r][c] == self._opposite_turn()):
-                count += 1
-                r = row-1+x*count
-                c = col-1+y*count
-            if count > 1 and self._board[r][c] == self._turn:
-                while count > 1:
-                    count -= 1
-                    r = row-1+x*count
-                    c = col-1+y*count
-                    self._board[r][c] = self._turn
-                self._board[row-1][col-1] = self._turn
-
+        flip_list = self._flip_list(row, col)
+        for x,y in flip_list:
+            self._board[x][y] = self._turn
+        self._board[row-1][col-1] = self._turn
         self._update_winning_state()
 
     def _is_valid_number(self, n:int)->bool:
@@ -107,24 +92,20 @@ class OthelloGame:
             return 'B'
 
     def _is_valid_move(self, row:int, col:int)->bool:
-        '''Returns True if move is within boundaries of row / col and it's a possible move, return False otherwise'''
-        if not self._is_in_board(row, col) or self._board[row-1][col-1] != '':
-            return False
-            #if self._flip_list(row, col):
-            #return True
-#return False
-        return True
+        '''Returns True if move is within boundaries of row / col and it's an empty slot, return False otherwise'''
+        return row > 0 and col > 0 and row <= self._row and col <= self._col and self._board[row-1][col-1] == '' and self._flip_list(row, col) != []
+
 
     def _is_in_board(self, row:int, col:int)->bool:
         '''Returns True if move is within the board boundaries, returns False otherwise'''
-        return row > 0 and col > 0 and row <= self._row and col <= self._col
+        return row >= 0 and col >= 0 and row < self._row and col < self._col
     
     def _check_valid_moves(self)->bool:
         '''Returns True if the opposite player still has valid moves, returns False otherwise'''
         self._turn = self._opposite_turn()
         for row in range(self._row):
             for col in range(self._col):
-                if self._is_valid_move(row, col):
+                if self._is_valid_move(row+1, col+1):
                     return True
         return False
 
@@ -152,3 +133,24 @@ class OthelloGame:
                 self._winner = 'Black'
             else:
                 self._winner = 'White'
+
+    def _flip_list(self, row:int, col:int)->list:
+        '''Returns a list of the opposite pieces that will be flipped'''
+        result = []
+        for x,y in self._directions:
+            opposite = []
+            r = row-1+x
+            c = col-1+y
+            while self._is_in_board(r, c):
+                if self._board[r][c] == self._opposite_turn():
+                    opposite.append((r,c))
+                    r += x
+                    c += y
+                elif self._board[r][c] == self._turn:
+                    result.extend(opposite)
+                    break
+                else:
+                    break
+        return result
+
+
