@@ -64,6 +64,7 @@ def get_most(s:str)->bool:
 def print_board(row:int, col:int, board:[[str]])->None:
     '''Prints the othello game board'''
     print('  ', end='')
+    
     for n in range(col):
         if n < 9:
             print(' ', end='')
@@ -73,23 +74,16 @@ def print_board(row:int, col:int, board:[[str]])->None:
             print(n+1, end=' ')
     print()
 
-    if row > col:
-        larger = row
-        smaller = col
-    else:
-        larger = col
-        smaller = row
-
-    for i in range(larger):
-        if i < 9:
-            print(i+1, end='  ')
+    for r in range(row):
+        if r < 9:
+            print(r+1, end='  ')
         else:
-            print(i+1, end=' ')
-        for j in range(smaller):
-            if board[j][i] == '':
+            print(r+1, end=' ')
+        for c in range(col):
+            if board[r][c] == '':
                 print('.', end='   ')
             else:
-                print(board[j][i], end='   ')
+                print(board[r][c], end='   ')
         print()
     print()
 
