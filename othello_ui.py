@@ -123,6 +123,8 @@ def print_turn(game_state:othello_game_logic.OthelloGame)->None:
 def print_winner(game_state:othello_game_logic.OthelloGame)->None:
     '''Prints the winner based on most or less discs as indicated at start of game'''
     winner = game_state.get_winner()
+    if winner == 'Tie':
+        print("It's a tie.")
     print('{} is the winner!'.format(winner))
 
 if __name__ == '__main__':
